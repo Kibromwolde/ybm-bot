@@ -18,8 +18,8 @@ from aiogram.types import (
 )
 
 # ================= CONFIGURATION =================
-BOT_TOKEN = "YOUR_TELEGRAM_BOT_TOKEN"
-ADMIN_ID = 123456789  # Replace with your numeric Telegram User ID
+BOT_TOKEN = "9092096363:AAH3SCTFEDyD74zQpffy2q3UZ1HgeC-dPAo"
+ADMIN_ID = 123456789  # ⚠️ Replace 123456789 with your actual numeric Telegram User ID (get it from @userinfobot)
 YBM_SUPPORT_USERNAME = "@YBMSupport"  # Replace with exact YBM Support handle
 MAX_USERS = 100
 FEE_AMOUNT = "250 ETB"
