@@ -2,6 +2,9 @@ import asyncio
 import logging
 import re
 import sqlite3
+import os
+from http.server import HTTPServer, BaseHTTPRequestHandler
+import threading
 from datetime import datetime
 from aiogram import Bot, Dispatcher, F, types
 from aiogram.filters import CommandStart, Command
@@ -27,6 +30,23 @@ TELEBIRR_NUMBER = "0914425378"
 logging.basicConfig(level=logging.INFO)
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
+
+# ================= DUMMY WEB SERVER FOR RENDER =================
+class HealthCheckHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(b"YBM Telegram Bot is active and running!")
+
+def run_web_server():
+    port = int(os.environ.get("PORT", 10000))
+    server = HTTPServer(("0.0.0.0", port), HealthCheckHandler)
+    logging.info(f"Health check server running on port {port}")
+    server.serve_forever()
+
+# Start the dummy web server in a background thread so Render passes its health check
+threading.Thread(target=run_web_server, daemon=True).start()
+# ===============================================================
 
 # ================= DATABASE SETUP =================
 conn = sqlite3.connect("yt_watch_pool.db")
@@ -56,7 +76,6 @@ CREATE TABLE IF NOT EXISTS proofs (
 )
 """)
 
-# Tracks viewed videos for automated rotation queue
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS watch_history (
     viewer_id INTEGER,
